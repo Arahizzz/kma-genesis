@@ -1,0 +1,44 @@
+version: "3.9"
+
+services:
+  redis:
+    image: redis:alpine
+    networks:
+      - application-network
+  postgres:
+    image: postgres:alpine
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=database
+    networks:
+      - application-network
+  rabbitmq:
+    image: rabbitmq:alpine
+    networks:
+      - application-network
+  data:
+    build:
+      context: .
+      dockerfile: DataService/Dockerfile
+    depends_on:
+      - postgres
+      - rabbitmq
+    networks:
+      - application-network
+  api:
+    build:
+      context: .
+      dockerfile: ApiService/Dockerfile
+    depends_on:
+      - rabbitmq
+      - data
+      - redis
+    ports:
+      - 7170:80
+    networks:
+      - application-network
+   
+networks:
+  application-network:
+    name: application-network
