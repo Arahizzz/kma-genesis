@@ -26,7 +26,7 @@ var configuration = builder.Configuration;
 
     //Services set up
     services.AddHttpClient<IUserQueryService, UserQueryService>(client =>
-        client.BaseAddress = new Uri("http://data:80/user"));
+        client.BaseAddress = new Uri(configuration.GetConnectionString("DataService")));
     services.Decorate<IUserQueryService, CachedUserQueryService>();
 
     services.AddEndpointsApiExplorer();
