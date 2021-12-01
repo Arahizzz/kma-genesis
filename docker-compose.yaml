@@ -24,6 +24,8 @@ services:
     depends_on:
       - postgres
       - rabbitmq
+    environment:
+      - Logging__Console__FormatterName=""
     networks:
       - application-network
   api:
@@ -34,6 +36,8 @@ services:
       - rabbitmq
       - data
       - redis
+    environment:
+      - Logging__Console__FormatterName=""
     ports:
       - 7170:80
     networks:
