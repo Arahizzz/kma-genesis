@@ -47,6 +47,7 @@ app.MapPost("user", (User user, IEventBus eventBus) =>
     eventBus.Publish(@event);
 });
 app.MapGet("user", async (Guid id, IUserQueryService userQuery) => await userQuery.GetUser(id));
+app.MapGet("guid", () => Guid.NewGuid());
 
 //Handle exceptions from REST calls to Data Service
 app.MapGet("/error", async ctx =>
