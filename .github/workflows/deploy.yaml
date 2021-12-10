@@ -1,0 +1,14 @@
+name: Docker Compose Actions Workflow
+on: push
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build
+        run: docker-compose --profile deploy build
+      - name: Test
+        run: docker-compose --profile test run integration-tests  
+      - name: Cleanup Tests
+        if: always()
+        run: docker-compose down -v
