@@ -5,6 +5,8 @@ services:
     image: redis:alpine
     networks:
       - application-network
+    profiles:
+      - deploy
   postgres:
     image: postgres:alpine
     environment:
@@ -13,10 +15,14 @@ services:
       - POSTGRES_DB=database
     networks:
       - application-network
+    profiles:
+      - deploy
   rabbitmq:
     image: rabbitmq:alpine
     networks:
       - application-network
+    profiles:
+      - deploy
   data:
     build:
       context: .
@@ -28,6 +34,8 @@ services:
       - Logging__Console__FormatterName=""
     networks:
       - application-network
+    profiles:
+      - deploy
   api:
     build:
       context: .
@@ -42,6 +50,24 @@ services:
       - 7170:80
     networks:
       - application-network
+    profiles:
+      - deploy
+  integration-tests:
+    container_name: integration-tests
+    depends_on:
+      - api
+    image: mcr.microsoft.com/dotnet/sdk:6.0
+    volumes:
+      - ./ApiService:/ApiService
+      - ./Testing:/Testing
+    working_dir: /Testing
+    command: dotnet test
+    environment:
+      - API_URL=http://api:80/
+    networks:
+      - application-network
+    profiles:
+      - test
    
 networks:
   application-network:
