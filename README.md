@@ -1,3 +1,5 @@
+# Practice 5 
+Action runs build and integration testing with docker compose. Action starts automatically on push to main and on [pull requests](https://github.com/Arahizzz/kma-genesis/pull/1) to main. It also saves container's logs to artifact if tests had failed.
 # Practice 4
 ## Setup and run the project:
 1. Install docker-compose
