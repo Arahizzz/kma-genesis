@@ -65,15 +65,22 @@ services:
     volumes:
       - ./ApiService:/ApiService
       - ./Testing:/Testing
+      - ./wait-for-it.sh:/Testing/wait-for-it.sh
     working_dir: /Testing
-    command: dotnet test
+    command: [
+        "./wait-for-it.sh",
+        "api:80",
+        "--",
+        "dotnet",
+        "test"
+    ]
     environment:
       - API_URL=http://api:80/
     networks:
       - application-network
     profiles:
       - test
-   
+
 networks:
   application-network:
     name: application-network
