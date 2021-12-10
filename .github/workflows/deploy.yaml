@@ -9,6 +9,14 @@ jobs:
         run: docker-compose --profile deploy build
       - name: Test
         run: docker-compose --profile test run integration-tests  
+      - name: Logs on Error
+        if: failure()
+        run: docker-compose --profile test logs | sed 's/\x1B\[[0-9;]\{1,\}[A-Za-z]//g' > logs.txt
+      - uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: logs
+          path: logs.txt
       - name: Cleanup Tests
         if: always()
         run: docker-compose down -v
