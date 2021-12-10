@@ -16,5 +16,7 @@ RUN dotnet publish "DataService.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
+COPY wait-for-it.sh wait-for-it.sh
+RUN ["chmod", "+x", "wait-for-it.sh"]
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "DataService.dll"]
+ENTRYPOINT ["./wait-for-it.sh", "rabbitmq:5672", "--", "./wait-for-it.sh", "postgres:5432", "--", "dotnet", "DataService.dll"]
