@@ -7,6 +7,7 @@ services:
       - application-network
     profiles:
       - deploy
+      - test
   postgres:
     image: postgres:alpine
     environment:
@@ -17,12 +18,14 @@ services:
       - application-network
     profiles:
       - deploy
+      - test
   rabbitmq:
     image: rabbitmq:alpine
     networks:
       - application-network
     profiles:
       - deploy
+      - test
   data:
     build:
       context: .
@@ -36,6 +39,7 @@ services:
       - application-network
     profiles:
       - deploy
+      - test
   api:
     build:
       context: .
@@ -52,6 +56,7 @@ services:
       - application-network
     profiles:
       - deploy
+      - test
   integration-tests:
     container_name: integration-tests
     depends_on:
